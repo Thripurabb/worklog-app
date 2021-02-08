@@ -16,3 +16,13 @@
     text-decoration: none;
     color: black;
   }
+  #addbtncontainer{
+    justify-content: center;
+  }
+  #addbtn{
+    width: 100px;
+    text-align: center;
+  }
+  #addbtnlink:hover{
+    text-decoration: none;
+  }

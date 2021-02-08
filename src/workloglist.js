@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -9,7 +10,26 @@ import {
 import Navbar from './navbar.js';
 
 class List extends React.Component
-{
+{ 
+    constructor(props){
+        super(props);
+        this.state = {
+            employee: []
+        };
+    }
+    componentDidMount() {
+        const empId = +this.props.match.params.id;
+        if(empId) {
+            axios.get("http://localhost:9092/employee/get/"+empId)
+                .then(response => {
+                    if(response.data!=null)
+                    {
+                        this.setState({employee: response.data});
+                        console.log(response.data);
+                    }
+                })
+        }
+    }
     render()
     {
         return(
@@ -19,63 +39,34 @@ class List extends React.Component
                     <table class="table table-striped table-hover">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Project Name</th>
-                                <th scope="col">Task Info</th>
-                                <th scope="col">Time Taken</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Project Name</th>
                                 <th scope="col">Task Info</th>
                                 <th scope="col">Time Taken</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">01/28/2021</th>
-                                <td>MFRP</td>
-                                <td>Spring boot learning</td>
-                                <td>5</td>
-                                <td>MetLife</td>
-                                <td>React Js Learning</td>
-                                <td>4</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">01/29/2021</th>
-                                <td>MFRP</td>
-                                <td>Did login form,home page</td>
-                                <td>4</td>
-                                <td>MetLife</td>
-                                <td>React Js Learning</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">02/01/2021</th>
-                                <td>MFRP</td>
-                                <td>Did UI for login,home pages</td>
-                                <td>4</td>
-                                <td>MetLife</td>
-                                <td>React Js Learning</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">02/02/2021</th>
-                                <td>MFRP</td>
-                                <td>Did front end part</td>
-                                <td>9</td>
-                                <td>MetLife</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">02/03/2021</th>
-                                <td>MFRP</td>
-                                <td>Started back end part</td>
-                                <td>6</td>
-                                <td>MetLife</td>
-                                <td>Did login page</td>
-                                <td>3</td>
-                            </tr>
+                            { this.state.employee.projectInfo == null ?
+                                <tr align="center">
+                                    <td colspan ="4">No Tasks Available.</td>
+                                </tr> :
+                                this.state.employee.projectInfo.map((proj) =>(
+                                    <tr key={proj.date}>
+                                        <td>{proj.date}</td>
+                                        <td>{proj.projectInfo}</td>
+                                        <td>{proj.taskInfo}</td>
+                                        <td>{proj.timeSpent}</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
+                </div>
+                <div class="container" id="addbtncontainer">
+                    <Link to={"/form/" + this.state.employee.employeeId} id="addbtnlink">
+                        <button type="button" id="addbtn" class="btn btn-dark btn-block">Add New
+                        </button>
+                    </Link>
                 </div>
             </div>
         );

@@ -19,7 +19,7 @@ class Navbar extends React.Component
                 <div class="collapse navbar-collapse justify-content-end" >
                     <div class="navbar-nav navbar-right" >
                             <NavLink to="/home" class="nav-item nav-link">Home</NavLink>
-                            <NavLink to="/form" class="nav-item nav-link">Add New</NavLink>
+                            <NavLink to="/addemp" class="nav-item nav-link">Add User</NavLink>
                             <NavLink to="/login" class="nav-item nav-link">Logout</NavLink>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -10,6 +11,19 @@ import Navbar from './navbar.js';
 
 class Home extends React.Component
 {
+    constructor(props){
+        super(props);
+        this.state ={
+            employee: []
+        }; 
+    }
+    componentDidMount(){
+        axios.get("http://localhost:9092/employee/getAll")
+            .then(response =>response.data)
+            .then((data)=>{
+                this.setState({employee: data});
+            })
+    }
     render()
     {
         return(
@@ -17,11 +31,26 @@ class Home extends React.Component
             <Navbar />
             <div class="container-fluid" id="card-container">
             <div class="card-columns">
-                <Link to="/workloglist" id="cardlinks"><Cards uname="El"/></Link>
-                <Link to="/workloglist" id="cardlinks"><Cards uname="ABC"/></Link>
-                <Link to="/workloglist" id="cardlinks"><Cards uname="Himawari"/></Link>
-                <Link to="/workloglist" id="cardlinks"><Cards uname="Jane"/></Link>
-                <Link to="/workloglist" id="cardlinks"><Cards uname="Thri"/></Link>
+                {
+                this.state.employee.map((emp)=>(
+                    <Link to={"/workloglist/"+emp.employeeId} id="cardlinks">
+                    <div class="card" key={emp.employeeId}>
+                        <img src="https://img.icons8.com/cotton/2x/person-male.png" 
+                            class="card-img-top" />
+                        <div class="card-body" style={{textAlign : "center"}}>
+                            <h5 class="card-title" >{emp.employeeName} </h5>
+                            <div class="card-text">
+                                <div>{emp.employeeRole}</div>
+                                <div>{emp.employeeServiceLine}</div>
+                            </div>
+                        </div>
+                    </div>
+                    </Link>
+                )
+                )
+                    
+                }
+                
             </div>
             </div>
             
